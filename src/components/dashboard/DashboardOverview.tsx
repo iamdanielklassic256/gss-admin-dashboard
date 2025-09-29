@@ -1,6 +1,5 @@
 import { 
-  Users, 
-  GraduationCap, 
+  Users,  
   BookOpen, 
   DollarSign,
   Calendar,
@@ -12,12 +11,10 @@ import {
   Eye,
   Download
 } from "lucide-react"
-import { MetricCard } from "./MetricCard"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import dashboardHero from "@/assets/dashboard-hero.jpg"
 
 const metrics = [
   {
@@ -337,7 +334,7 @@ export function DashboardOverview() {
       </div>
 
       {/* Additional Insights */}
-      <Card className="border-0 shadow-sm bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-100">
+      <Card className=" shadow-sm bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-100">
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
             <div className="mb-4 lg:mb-0">
