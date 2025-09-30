@@ -1,135 +1,5 @@
-import { 
-  Users,  
-  BookOpen, 
-  DollarSign,
-  Calendar,
-  Award,
-  UserCheck,
-  ArrowUp,
-  Clock,
-} from "lucide-react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Progress } from "@/components/ui/progress"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
 import UserHeroSection from "../home/UserHeroSection"
 
-const metrics = [
-  {
-    title: "Total Students",
-    value: "2,847",
-    icon: Users,
-    trend: { value: 12, isPositive: true },
-    description: "Active enrollment",
-    color: "blue"
-  },
-  {
-    title: "Faculty Members",
-    value: "156",
-    icon: UserCheck,
-    trend: { value: 3, isPositive: true },
-    description: "Teaching & support staff",
-    color: "purple"
-  },
-  {
-    title: "Active Courses",
-    value: "89",
-    icon: BookOpen,
-    trend: { value: 8, isPositive: true },
-    description: "This semester",
-    color: "orange"
-  },
-  {
-    title: "Revenue (Monthly)",
-    value: "$847K",
-    icon: DollarSign,
-    trend: { value: 15, isPositive: true },
-    description: "Fees collected",
-    color: "green"
-  },
-]
-
-const recentActivities = [
-  {
-    title: "New Student Registration",
-    description: "Sarah Johnson submitted application for Grade 10",
-    time: "2 hours ago",
-    type: "success",
-    icon: Users
-  },
-  {
-    title: "Fee Payment Received",
-    description: "Monthly fees collected from Grade 8 students",
-    time: "4 hours ago",
-    type: "info",
-    icon: DollarSign
-  },
-  {
-    title: "Staff Meeting Scheduled",
-    description: "Department heads meeting on Friday at 2 PM",
-    time: "1 day ago",
-    type: "warning",
-    icon: UserCheck
-  },
-  {
-    title: "Exam Results Published",
-    description: "Mid-term examination results are now available",
-    time: "2 days ago",
-    type: "success",
-    icon: Award
-  },
-]
-
-const upcomingEvents = [
-  {
-    title: "Parent-Teacher Conference",
-    date: "Dec 15, 2024",
-    time: "9:00 AM - 5:00 PM",
-    attendees: 45,
-    type: "academic"
-  },
-  {
-    title: "Science Fair",
-    date: "Dec 18, 2024",
-    time: "10:00 AM - 3:00 PM",
-    attendees: 120,
-    type: "event"
-  },
-  {
-    title: "Winter Break Begins",
-    date: "Dec 20, 2024",
-    time: "Last day of classes",
-    attendees: 2847,
-    type: "holiday"
-  },
-]
-
-const quickStats = [
-  {
-    title: "Attendance Rate",
-    value: "94.2%",
-    progress: 94.2,
-    trend: "+2.1%",
-    isPositive: true,
-    description: "Current week average"
-  },
-  {
-    title: "Grade Performance",
-    value: "3.7/4.0",
-    progress: 92.5,
-    trend: "+0.2",
-    isPositive: true,
-    description: "Average GPA"
-  },
-  {
-    title: "Fee Collection",
-    value: "87%",
-    progress: 87,
-    trend: "+5%",
-    isPositive: true,
-    description: "Monthly target"
-  }
-]
 
 export function DashboardOverview() {
   return (
@@ -138,7 +8,7 @@ export function DashboardOverview() {
       
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         {metrics.map((metric) => (
           <Card key={metric.title} className="border-0 shadow-sm hover:shadow-md transition-all duration-200 bg-white">
             <CardContent className="p-6">
@@ -166,12 +36,12 @@ export function DashboardOverview() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
 
       {/* Main Content Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Recent Activities */}
-        <Card className="lg:col-span-2 border-0 shadow-sm bg-white">
+        {/* <Card className="lg:col-span-2 border-0 shadow-sm bg-white">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div>
@@ -213,10 +83,10 @@ export function DashboardOverview() {
               ))}
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
 
         {/* Upcoming Events */}
-        <Card className="border-0 shadow-sm bg-white">
+        {/* <Card className="border-0 shadow-sm bg-white">
           <CardHeader className="pb-4">
             <div className="flex items-center justify-between">
               <div>
@@ -271,11 +141,11 @@ export function DashboardOverview() {
               ))}
             </div>
           </CardContent>
-        </Card>
+        </Card> */}
       </div>
 
       {/* Quick Stats */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         {quickStats.map((stat, index) => (
           <Card key={index} className="border-0 shadow-sm bg-white">
             <CardHeader className="pb-4">
@@ -295,10 +165,10 @@ export function DashboardOverview() {
             </CardContent>
           </Card>
         ))}
-      </div>
+      </div> */}
 
       {/* Additional Insights */}
-      <Card className=" shadow-sm bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-100">
+      {/* <Card className=" shadow-sm bg-gradient-to-r from-emerald-50 to-green-50 border border-emerald-100">
         <CardContent className="p-6">
           <div className="flex flex-col lg:flex-row items-center justify-between text-center lg:text-left">
             <div className="mb-4 lg:mb-0">
@@ -319,7 +189,7 @@ export function DashboardOverview() {
             </div>
           </div>
         </CardContent>
-      </Card>
+      </Card> */}
     </div>
   )
 }
