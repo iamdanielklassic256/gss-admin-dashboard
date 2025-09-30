@@ -3,18 +3,16 @@ import {
   BookOpen, 
   DollarSign,
   Calendar,
-  TrendingUp,
   Award,
   UserCheck,
   ArrowUp,
   Clock,
-  Eye,
-  Download
 } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
+import UserHeroSection from "../home/UserHeroSection"
 
 const metrics = [
   {
@@ -136,42 +134,8 @@ const quickStats = [
 export function DashboardOverview() {
   return (
     <div className="space-y-6">
-      {/* Hero Section */}
-      <div className="relative">
-        <Card className="border-0 shadow-lg overflow-hidden bg-gradient-to-r from-emerald-600 to-green-600 border-none">
-          <div className="absolute inset-0 bg-black/10" />
-          <CardContent className="relative z-10 p-8">
-            <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between">
-              <div className="text-white mb-6 lg:mb-0">
-                <h1 className="text-3xl font-bold mb-2">Welcome back, Admin! 👋</h1>
-                <p className="text-emerald-100 text-lg mb-4">
-                  Here's what's happening at your school today
-                </p>
-                <div className="flex flex-wrap gap-3">
-                  <Badge className="bg-white/20 text-white border-0 backdrop-blur-sm hover:bg-white/30">
-                    <Calendar className="w-3 h-3 mr-2" />
-                    Today: December 12, 2024
-                  </Badge>
-                  <Badge className="bg-white/20 text-white border-0 backdrop-blur-sm hover:bg-white/30">
-                    <TrendingUp className="w-3 h-3 mr-2" />
-                    School Performance: Excellent
-                  </Badge>
-                </div>
-              </div>
-              <div className="flex gap-3">
-                <Button className="bg-white/20 text-white border-0 backdrop-blur-sm hover:bg-white/30">
-                  <Eye className="w-4 h-4 mr-2" />
-                  View Reports
-                </Button>
-                <Button className="bg-white text-emerald-600 hover:bg-white/90 border-0">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Data
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <UserHeroSection />
+      
 
       {/* Metrics Grid */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">

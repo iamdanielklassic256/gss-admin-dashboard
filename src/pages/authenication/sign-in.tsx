@@ -1,28 +1,48 @@
-import { useState } from "react"
-import { Eye, EyeOff, LogIn, BookOpen, } from "lucide-react"
+import { useState, useEffect } from "react"
+import { Eye, EyeOff, LogIn, BookOpen } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Label } from "@/components/ui/label"
+import { useAuthStore } from "@/stores/authStore"
+import { useNavigate, useLocation } from "react-router-dom"
 
 function LoginPage() {
 	const [showPassword, setShowPassword] = useState(false)
 	const [rememberMe, setRememberMe] = useState(false)
-	const [isLoading, setIsLoading] = useState(false)
 	const [formData, setFormData] = useState({
 		email: "",
 		password: ""
 	})
 
+	const { login, isLoading, error, clearError, isAuthenticated } = useAuthStore()
+	const navigate = useNavigate()
+	const location = useLocation()
+
+	// Redirect if already authenticated
+	useEffect(() => {
+		if (isAuthenticated) {
+			const from = location.state?.from?.pathname || "/"
+			navigate(from, { replace: true })
+		}
+	}, [isAuthenticated, navigate, location])
+
+	// Clear error when form data changes
+	useEffect(() => {
+		clearError()
+	}, [formData.email, formData.password, clearError])
+
 	const handleSubmit = async (e: React.FormEvent) => {
 		e.preventDefault()
-		setIsLoading(true)
-		// Simulate login process
-		setTimeout(() => {
-			setIsLoading(false)
-			// Handle login logic here
-		}, 1500)
+		
+		try {
+			await login(formData)
+			// Navigation will be handled by the useEffect above
+		} catch (error) {
+			// Error is handled in the store
+			console.error('Login failed:', error)
+		}
 	}
 
 	const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +90,16 @@ function LoginPage() {
 						</CardHeader>
 						<CardContent>
 							<form onSubmit={handleSubmit} className="space-y-5">
+								{/* Error Message */}
+								{error && (
+									<div className="p-3 text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2">
+										<svg className="w-4 h-4 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+											<path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.28 7.22a.75.75 0 00-1.06 1.06L8.94 10l-1.72 1.72a.75.75 0 101.06 1.06L10 11.06l1.72 1.72a.75.75 0 101.06-1.06L11.06 10l1.72-1.72a.75.75 0 00-1.06-1.06L10 8.94 8.28 7.22z" clipRule="evenodd" />
+										</svg>
+										{error}
+									</div>
+								)}
+
 								{/* Email Field */}
 								<div className="space-y-2">
 									<Label htmlFor="email" className="text-sm font-medium text-gray-700">
@@ -85,6 +115,7 @@ function LoginPage() {
 											onChange={handleChange}
 											className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
 											required
+											disabled={isLoading}
 										/>
 										<div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
 											<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -117,6 +148,7 @@ function LoginPage() {
 											onChange={handleChange}
 											className="w-full pl-10 pr-12 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
 											required
+											disabled={isLoading}
 										/>
 										<div className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
 											<svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -127,6 +159,7 @@ function LoginPage() {
 											type="button"
 											onClick={() => setShowPassword(!showPassword)}
 											className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+											disabled={isLoading}
 										>
 											{showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
 										</button>
@@ -141,6 +174,7 @@ function LoginPage() {
 											checked={rememberMe}
 											onCheckedChange={(checked) => setRememberMe(checked as boolean)}
 											className="data-[state=checked]:bg-emerald-600 data-[state=checked]:border-emerald-600"
+											disabled={isLoading}
 										/>
 										<Label
 											htmlFor="remember"
@@ -154,7 +188,7 @@ function LoginPage() {
 								{/* Sign In Button */}
 								<Button
 									type="submit"
-									disabled={isLoading}
+									disabled={isLoading || !formData.email || !formData.password}
 									className="w-full bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white py-3 rounded-xl font-semibold shadow-lg shadow-emerald-500/25 hover:shadow-emerald-500/40 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
 								>
 									{isLoading ? (
@@ -170,7 +204,6 @@ function LoginPage() {
 									)}
 								</Button>
 							</form>
-							
 						</CardContent>
 					</Card>
 

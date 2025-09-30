@@ -1,24 +1,60 @@
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { DashboardPage, LoginPage, NotFoundPage } from "./pages";
+import { useAuthStore } from "./stores/authStore";
+import ProtectedRoute from "./components/authenication/ProtectedRoute";
 
+// Component to handle authentication state
+const AppRoutes = () => {
+  const { isAuthenticated, isLoading } = useAuthStore();
 
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 border-2 border-emerald-600 border-t-transparent rounded-full animate-spin" />
+          <span className="text-gray-600">Loading...</span>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Routes>
+      {/* Public Routes */}
+      <Route 
+        path="/auth/sign-in" 
+        element={
+          isAuthenticated ? <Navigate to="/" replace /> : <LoginPage />
+        } 
+      />
+
+      {/* Protected Routes */}
+      <Route
+        path="/"
+        element={
+          <ProtectedRoute>
+            <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+
+      {/* ADD ALL CUSTOM PROTECTED ROUTES ABOVE */}
+      
+      {/* Catch-all route */}
+      <Route path="*" element={<NotFoundPage />} />
+    </Routes>
+  );
+};
 
 const App = () => (
   <TooltipProvider>
     <Toaster />
     <Sonner />
     <BrowserRouter>
-      <Routes>
-        {/* Authenication */}
-        <Route path="/auth/sign-in" element={<LoginPage />} />
-
-        <Route path="/" element={<DashboardPage />} />
-        {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-        <Route path="*" element={<NotFoundPage />} />
-      </Routes>
+      <AppRoutes />
     </BrowserRouter>
   </TooltipProvider>
 );
