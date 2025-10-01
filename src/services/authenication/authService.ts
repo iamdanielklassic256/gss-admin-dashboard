@@ -1,15 +1,5 @@
-import axios from 'axios';
+import { api } from "@/app/api";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-const API_TIMEOUT = parseInt(import.meta.env.VITE_API_TIMEOUT || '10000');
-
-const api = axios.create({
-  baseURL: API_BASE_URL,
-  timeout: API_TIMEOUT,
-  headers: {
-    'Content-Type': 'application/json',
-  },
-});
 
 // Request interceptor to add auth token
 api.interceptors.request.use(
