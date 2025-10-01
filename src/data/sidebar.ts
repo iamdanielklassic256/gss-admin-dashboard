@@ -130,12 +130,12 @@ export const menuItems = [
         icon: Phone,
         description: "Contact specific departments"
       },
-      // { 
-      //   title: "Messages & Inquiries", 
-      //   url: "/communications/messages",
-      //   icon: MessageCircle,
-      //   description: "Manage incoming messages"
-      // },
+      { 
+        title: "Messages & Inquiries", 
+        url: "/communications/messages",
+        icon: MessageCircle,
+        description: "Manage incoming messages"
+      },
       { 
         title: "Social Media", 
         url: "/communications/social-media",
