@@ -1,3 +1,5 @@
 export {default as DashboardPage} from './home'
 export {default as NotFoundPage} from './not-found'
 export {default as LoginPage} from '@/pages/authenication/sign-in'
+export {default as AboutPage} from '@/pages/about/about'
+export {default as DepartmentContactPage} from '@/pages/contact/department'

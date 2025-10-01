@@ -5,20 +5,22 @@ import {
   ChevronRight,
 } from "lucide-react"
 import { useState } from "react"
+import { Link, useLocation } from "react-router-dom"
 import logo from '@/assets/logo/logo.png'
-
-
 
 export default function DashboardSidebar() {
   const [isCollapsed, setIsCollapsed] = useState(false)
-  const [currentPath, setCurrentPath] = useState("/")
+  const location = useLocation()
   const [searchQuery, setSearchQuery] = useState("")
   const [openDropdown, setOpenDropdown] = useState(null)
 
-  const isActive = (path: any) => currentPath === path
-
-  const handleNavClick = (path: any) => {
-    setCurrentPath(path)
+  const isActive = (path: any) => location.pathname === path
+  
+  const isParentActive = (item: any) => {
+    if (item.dropdown) {
+      return item.dropdown.some((subItem: any) => location.pathname === subItem.url)
+    }
+    return location.pathname === item.url
   }
 
   const toggleDropdown = (title: any) => {
@@ -91,65 +93,81 @@ export default function DashboardSidebar() {
               {filteredMenuItems.map((item) => (
                 <div key={item.title} className="space-y-1">
                   {/* Main Menu Item */}
-                  <button
-                    onClick={() => {
-                      if (item.dropdown) {
-                        toggleDropdown(item.title)
-                      } else {
-                        handleNavClick(item.url)
-                        setOpenDropdown(null) // Close any open dropdown when clicking a non-dropdown item
-                      }
-                    }}
-                    className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
-                      isActive(item.url)
-                        ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30'
-                        : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'
-                    }`}
-                  >
-                    {isActive(item.url) && (
-                      <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
-                    )}
-                    <item.icon className={`w-5 h-5 relative z-10 ${isActive(item.url) ? 'text-white' : 'text-gray-500 group-hover:text-emerald-600'} transition-all group-hover:scale-110`} />
-                    {!isCollapsed && (
-                      <>
-                        <div className="flex-1 text-left relative z-10">
-                          <div className="font-semibold text-sm">{item.title}</div>
-                          <div className={`text-xs ${isActive(item.url) ? 'text-white/80' : 'text-gray-500'}`}>
-                            {item.description}
+                  {item.dropdown ? (
+                    <button
+                      onClick={() => toggleDropdown(item.title)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
+                        isParentActive(item)
+                          ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30'
+                          : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'
+                      }`}
+                    >
+                      {isParentActive(item) && (
+                        <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
+                      )}
+                      <item.icon className={`w-5 h-5 relative z-10 ${isParentActive(item) ? 'text-white' : 'text-gray-500 group-hover:text-emerald-600'} transition-all group-hover:scale-110`} />
+                      {!isCollapsed && (
+                        <>
+                          <div className="flex-1 text-left relative z-10">
+                            <div className="font-semibold text-sm">{item.title}</div>
+                            <div className={`text-xs ${isParentActive(item) ? 'text-white/80' : 'text-gray-500'}`}>
+                              {item.description}
+                            </div>
                           </div>
-                        </div>
-                        <div className="flex items-center gap-2 relative z-10">
-                          {item.badge && (
-                            <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
-                              isActive(item.url)
-                                ? 'bg-white/20 text-white'
-                                : 'bg-emerald-100 text-emerald-700'
-                            }`}>
-                              {item.badge}
-                            </span>
-                          )}
-                          {item.dropdown && (
+                          <div className="flex items-center gap-2 relative z-10">
+                            {item.badge && (
+                              <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
+                                isParentActive(item)
+                                  ? 'bg-white/20 text-white'
+                                  : 'bg-emerald-100 text-emerald-700'
+                              }`}>
+                                {item.badge}
+                              </span>
+                            )}
                             <ChevronDown 
                               className={`w-4 h-4 transition-transform duration-200 ${
                                 openDropdown === item.title ? 'rotate-180' : ''
-                              } ${isActive(item.url) ? 'text-white' : 'text-gray-400'}`} 
+                              } ${isParentActive(item) ? 'text-white' : 'text-gray-400'}`} 
                             />
-                          )}
-                        </div>
-                      </>
-                    )}
-                  </button>
+                          </div>
+                        </>
+                      )}
+                    </button>
+                  ) : (
+                    <Link
+                      to={item.url}
+                      onClick={() => setOpenDropdown(null)}
+                      className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group relative overflow-hidden ${
+                        isParentActive(item)
+                          ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30'
+                          : 'text-gray-600 hover:bg-emerald-50 hover:text-emerald-700'
+                      }`}
+                    >
+                      {isParentActive(item) && (
+                        <div className="absolute inset-0 bg-white/10 animate-pulse"></div>
+                      )}
+                      <item.icon className={`w-5 h-5 relative z-10 ${isParentActive(item) ? 'text-white' : 'text-gray-500 group-hover:text-emerald-600'} transition-all group-hover:scale-110`} />
+                      {!isCollapsed && (
+                        <>
+                          <div className="flex-1 text-left relative z-10">
+                            <div className="font-semibold text-sm">{item.title}</div>
+                            <div className={`text-xs ${isParentActive(item) ? 'text-white/80' : 'text-gray-500'}`}>
+                              {item.description}
+                            </div>
+                          </div>
+                         
+                        </>
+                      )}
+                    </Link>
+                  )}
 
                   {/* Dropdown Items */}
                   {!isCollapsed && item.dropdown && openDropdown === item.title && (
                     <div className="ml-8 space-y-1 animate-in fade-in duration-200">
                       {item.dropdown.map((subItem) => (
-                        <button
+                        <Link
                           key={subItem.title}
-                          onClick={() => {
-                            handleNavClick(subItem.url)
-                            setOpenDropdown(null) // Close dropdown after selecting an item
-                          }}
+                          to={subItem.url}
                           className={`w-full flex items-center gap-3 px-4 py-2.5 rounded-lg transition-all duration-200 group ${
                             isActive(subItem.url)
                               ? 'bg-emerald-100 text-emerald-700 font-semibold'
@@ -161,7 +179,7 @@ export default function DashboardSidebar() {
                           {isActive(subItem.url) && (
                             <ChevronRight className="w-3 h-3 ml-auto" />
                           )}
-                        </button>
+                        </Link>
                       ))}
                     </div>
                   )}
@@ -180,12 +198,10 @@ export default function DashboardSidebar() {
             </div> */}
             {/* <nav className="space-y-1">
               {systemItems.map((item) => (
-                <button
+                <Link
                   key={item.title}
-                  onClick={() => {
-                    handleNavClick(item.url)
-                    setOpenDropdown(null) // Close any open dropdown when clicking system items
-                  }}
+                  to={item.url}
+                  onClick={() => setOpenDropdown(null)}
                   className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group ${
                     isActive(item.url)
                       ? 'bg-gradient-to-r from-emerald-500 to-emerald-600 text-white shadow-lg shadow-emerald-500/30'
@@ -208,7 +224,7 @@ export default function DashboardSidebar() {
                       )}
                     </>
                   )}
-                </button>
+                </Link>
               ))}
             </nav> */}
           </div>

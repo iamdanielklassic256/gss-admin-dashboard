@@ -1,8 +1,19 @@
-import {
-  BookOpen,
-  Bell,
-  Home,
-} from "lucide-react"
+import { 
+  Home, 
+  BookOpen, 
+  Users, 
+  UserCheck, 
+  GraduationCap, 
+  Calendar, 
+  DollarSign, 
+  MessageSquare, 
+  FileText,
+  Mail,
+  MessageCircle,
+  Phone,
+  Share2,
+  Bell
+} from "lucide-react";
 
 export const menuItems = [
   {
@@ -13,21 +24,21 @@ export const menuItems = [
     badge: null,
     color: "emerald"
   },
-  {
-    title: "School Profile",
-    url: "/school-profile",
-    icon: BookOpen,
-    description: "About & Leadership",
-    badge: null,
-    color: "amber",
-    dropdown: [
-      { title: "About School", url: "/school-history/about" },
-      { title: "Leadership", url: "/school-history/leadership" },
-      { title: "Mission & Vision", url: "/school-history/mission" },
-      { title: "Achievements", url: "/school-history/achievements" },
-      { title: "Gallery", url: "/school-history/gallery" },
-    ]
-  },
+  // {
+  //   title: "School Profile",
+  //   url: "/school-profile",
+  //   icon: BookOpen,
+  //   description: "About & Leadership",
+  //   badge: null,
+  //   color: "amber",
+  //   dropdown: [
+  //     { title: "About School", url: "/school-profile/about" },
+  //     { title: "Leadership", url: "/school-profile/leadership" },
+  //     { title: "Mission & Vision", url: "/school-profile/mission" },
+  //     { title: "Achievements", url: "/school-profile/achievements" },
+  //     { title: "Gallery", url: "/school-profile/gallery" },
+  //   ]
+  // },
   // {
   //   title: "Students",
   //   url: "/students",
@@ -105,14 +116,52 @@ export const menuItems = [
   //     { title: "Financial Reports", url: "/finance/reports" },
   //   ]
   // },
-  // {
-  //   title: "Communications",
-  //   url: "/communications",
-  //   icon: MessageSquare,
-  //   description: "News & Announcements",
-  //   badge: "12",
-  //   color: "cyan"
-  // },
+  {
+    title: "Communications",
+    url: "/communications",
+    icon: MessageSquare,
+    description: "News, Messages & Social Media",
+    badge: "12",
+    color: "cyan",
+    dropdown: [
+      { 
+        title: "Department Contacts", 
+        url: "/communications/department-contacts",
+        icon: Phone,
+        description: "Contact specific departments"
+      },
+      { 
+        title: "Messages & Inquiries", 
+        url: "/communications/messages",
+        icon: MessageCircle,
+        description: "Manage incoming messages"
+      },
+      { 
+        title: "Social Media", 
+        url: "/communications/social-media",
+        icon: Share2,
+        description: "Social media management"
+      },
+      // { 
+      //   title: "News & Announcements", 
+      //   url: "/communications/news",
+      //   icon: Newspaper,
+      //   description: "School announcements"
+      // },
+      // { 
+      //   title: "Email Communications", 
+      //   url: "/communications/email",
+      //   icon: Mail,
+      //   description: "Bulk email & newsletters"
+      // },
+      // { 
+      //   title: "Public Relations", 
+      //   url: "/communications/public-relations",
+      //   icon: Megaphone,
+      //   description: "Media & community relations"
+      // }
+    ]
+  },
   // {
   //   title: "Reports",
   //   url: "/reports",
@@ -125,9 +174,9 @@ export const menuItems = [
   //     { title: "Financial Reports", url: "/reports/financial" },
   //     { title: "Attendance Reports", url: "/reports/attendance" },
   //     { title: "Performance Reports", url: "/reports/performance" },
+  //     { title: "Communication Reports", url: "/reports/communications" },
   //   ]
   // },
-
 ]
 
 export const systemItems = [
