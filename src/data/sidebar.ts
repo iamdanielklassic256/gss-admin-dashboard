@@ -12,7 +12,8 @@ import {
   MessageCircle,
   Phone,
   Share2,
-  Bell
+  Bell,
+  SubscriptIcon
 } from "lucide-react";
 
 export const menuItems = [
@@ -121,7 +122,6 @@ export const menuItems = [
     url: "/communications",
     icon: MessageSquare,
     description: "News, Messages & Social Media",
-    badge: "12",
     color: "cyan",
     dropdown: [
       { 
@@ -154,12 +154,12 @@ export const menuItems = [
       //   icon: Mail,
       //   description: "Bulk email & newsletters"
       // },
-      // { 
-      //   title: "Public Relations", 
-      //   url: "/communications/public-relations",
-      //   icon: Megaphone,
-      //   description: "Media & community relations"
-      // }
+      { 
+        title: "Subscribers", 
+        url: "/communications/subscribers",
+        icon: SubscriptIcon,
+        description: "Media & community relations"
+      }
     ]
   },
   // {

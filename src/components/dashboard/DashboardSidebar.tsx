@@ -115,15 +115,6 @@ export default function DashboardSidebar() {
                             </div>
                           </div>
                           <div className="flex items-center gap-2 relative z-10">
-                            {item.badge && (
-                              <span className={`px-2.5 py-1 rounded-lg text-xs font-bold ${
-                                isParentActive(item)
-                                  ? 'bg-white/20 text-white'
-                                  : 'bg-emerald-100 text-emerald-700'
-                              }`}>
-                                {item.badge}
-                              </span>
-                            )}
                             <ChevronDown 
                               className={`w-4 h-4 transition-transform duration-200 ${
                                 openDropdown === item.title ? 'rotate-180' : ''

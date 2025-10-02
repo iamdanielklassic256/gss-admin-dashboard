@@ -60,7 +60,7 @@ const Table = <T,>({
     return String(row[column.key as keyof T] || '');
   };
 
-  if (loading && data.length === 0) {
+  if (loading && data?.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="text-center py-8 text-gray-500">
@@ -71,7 +71,7 @@ const Table = <T,>({
     );
   }
 
-  if (!loading && data.length === 0) {
+  if (!loading && data?.length === 0) {
     return (
       <div className="bg-white rounded-lg shadow overflow-hidden">
         <div className="text-center py-8 text-gray-500">
@@ -112,7 +112,7 @@ const Table = <T,>({
             </tr>
           </thead>
           <tbody className={`bg-white divide-y divide-gray-200 ${striped ? 'even:bg-gray-50' : ''}`}>
-            {data.map((row, index) => (
+            {data?.map((row, index) => (
               <tr
                 key={getRowKey(row, index)}
                 className={`
