@@ -48,17 +48,25 @@ const Table = <T,>({
 
   const handleSort = (key: string) => {
     if (!onSort || !columns.find(col => col.key === key)?.sortable) return;
-    
+
     const direction = sortKey === key && sortDirection === 'asc' ? 'desc' : 'asc';
     onSort(key, direction);
   };
 
   const renderCell = (column: Column<T>, row: T, index: number) => {
-    if (column.render) {
-      return column.render(row[column.key as keyof T], row, index);
-    }
-    return String(row[column.key as keyof T] || '');
+    // Make sure row exists
+    if (!row) return '';
+
+    // Safe access for the column key
+    const value = row[column.key as keyof T];
+
+    // Use the render function if provided
+    if (column.render) return column.render(value ?? '', row, index);
+
+    // Fallback for missing values
+    return String(value ?? '');
   };
+
 
   if (loading && data?.length === 0) {
     return (

@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AboutPage, DashboardPage, DepartmentContactPage, LoginPage, MessagePage, NotFoundPage, SocialMediaPage, SubscribersPage } from "./pages";
+import { AboutPage, BlogPage, BoardGovernorPage, DashboardPage, DepartmentContactPage, LoginPage, MessagePage, NotFoundPage, SocialMediaPage, SubscribersPage } from "./pages";
 import { useAuthStore } from "./stores/authStore";
 import ProtectedRoute from "./components/authenication/ProtectedRoute";
 
@@ -37,6 +37,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/school-administration/bog"
+        element={
+          <ProtectedRoute>
+            <BoardGovernorPage />
           </ProtectedRoute>
         }
       />
@@ -77,6 +85,14 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <SubscribersPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/communications/news"
+        element={
+          <ProtectedRoute>
+            <BlogPage />
           </ProtectedRoute>
         }
       />

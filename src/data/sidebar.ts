@@ -13,7 +13,8 @@ import {
   Phone,
   Share2,
   Bell,
-  SubscriptIcon
+  SubscriptIcon,
+  Newspaper
 } from "lucide-react";
 
 export const menuItems = [
@@ -24,6 +25,21 @@ export const menuItems = [
     description: "Overview & Analytics",
     badge: null,
     color: "emerald"
+  },
+  {
+    title: "School Administration",
+    url: "/school-administration",
+    icon: BookOpen,
+    description: "Leadership",
+    badge: null,
+    color: "amber",
+    dropdown: [
+      { title: "Board of Governors", url: "/school-administration/bog" },
+      // { title: "Leadership", url: "/school-profile/leadership" },
+      // { title: "Mission & Vision", url: "/school-profile/mission" },
+      // { title: "Achievements", url: "/school-profile/achievements" },
+      // { title: "Gallery", url: "/school-profile/gallery" },
+    ]
   },
   // {
   //   title: "School Profile",
@@ -142,12 +158,12 @@ export const menuItems = [
         icon: Share2,
         description: "Social media management"
       },
-      // { 
-      //   title: "News & Announcements", 
-      //   url: "/communications/news",
-      //   icon: Newspaper,
-      //   description: "School announcements"
-      // },
+      { 
+        title: "News & Announcements", 
+        url: "/communications/news",
+        icon: Newspaper,
+        description: "School announcements"
+      },
       // { 
       //   title: "Email Communications", 
       //   url: "/communications/email",
