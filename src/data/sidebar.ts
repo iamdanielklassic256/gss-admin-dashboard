@@ -36,6 +36,7 @@ export const menuItems = [
     dropdown: [
       { title: "Board of Governors", url: "/school-administration/bog" },
       { title: "School Leadership", url: "/school-administration/leadership" },
+      { title: "Student Leadership", url: "/school-administration/student" },
       // { title: "Mission & Vision", url: "/school-profile/mission" },
       // { title: "Achievements", url: "/school-profile/achievements" },
       // { title: "Gallery", url: "/school-profile/gallery" },
