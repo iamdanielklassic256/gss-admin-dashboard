@@ -85,20 +85,19 @@ export const menuItems = [
   //     { title: "Support Staff", url: "/staff/support" },
   //   ]
   // },
-  // {
-  //   title: "Academics",
-  //   url: "/academics",
-  //   icon: BookOpen,
-  //   description: "Courses & Curriculum",
-  //   badge: null,
-  //   color: "orange",
-  //   dropdown: [
-  //     { title: "Courses", url: "/academics/courses" },
-  //     { title: "Curriculum", url: "/academics/curriculum" },
-  //     { title: "Grades", url: "/academics/grades" },
-  //     { title: "Timetable", url: "/academics/timetable" },
-  //   ]
-  // },
+  {
+    title: "Academics",
+    url: "/academics",
+    icon: BookOpen,
+    description: "Courses & Curriculum",
+    badge: null,
+    color: "orange",
+    dropdown: [
+      { title: "Curriculum", url: "/academics/curriculum" },
+      // { title: "Grades", url: "/academics/grades" },
+      // { title: "Timetable", url: "/academics/timetable" },
+    ]
+  },
   // {
   //   title: "Admissions",
   //   url: "/admissions",
