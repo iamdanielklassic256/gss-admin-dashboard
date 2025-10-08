@@ -94,6 +94,7 @@ export const menuItems = [
     color: "orange",
     dropdown: [
       { title: "Curriculum", url: "/academics/curriculum" },
+      { title: "Co-Curriculum", url: "/academics/co-curriculum" },
       // { title: "Grades", url: "/academics/grades" },
       // { title: "Timetable", url: "/academics/timetable" },
     ]

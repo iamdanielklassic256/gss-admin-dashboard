@@ -5,6 +5,7 @@ export {default as BoardGovernorPage} from '@/pages/administration/board-of-gove
 export {default as SchoolLeadershipPage} from '@/pages/administration/school-leadership'
 export {default as StudentLeadershipPage} from '@/pages/administration/student-leadership'
 export {default as CurriculumPage} from '@/pages/academics/curriculum'
+export {default as CoCurriculumPage} from '@/pages/academics/co-curriculum'
 export {default as AboutPage} from '@/pages/about/about'
 export {default as DepartmentContactPage} from '@/pages/contact/department'
 export {default as SocialMediaPage} from '@/pages/contact/social-media'
