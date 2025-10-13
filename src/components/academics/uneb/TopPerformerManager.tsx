@@ -7,50 +7,95 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Save, Edit, Trash2 } from 'lucide-react';
-import type { TopPerformer } from '@/types/uneb-performance';
-import { unebPerformanceApi } from '@/services/academic/uneb-performance-api';
+import { Plus, Save, Edit, Trash2, Trophy } from 'lucide-react';
+import { useToast } from '@/components/ui/use-toast';
+import axios from 'axios';
+
+interface AcademicYear {
+  id: string;
+  year: string;
+  isCurrent: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface TopPerformer {
+  id: string;
+  name: string;
+  level: 'O-Level' | 'A-Level';
+  aggregate: number;
+  distinctions?: number;
+  subjects: string;
+  category: 'overall' | 'science' | 'arts' | 'female';
+  photoUrl?: string;
+  yearId: string;
+  createdAt: string;
+  updatedAt: string;
+  academicYear?: AcademicYear;
+}
+
+interface TopPerformersResponse {
+  oLevel: TopPerformer[];
+  aLevel: TopPerformer[];
+}
 
 interface TopPerformersManagerProps {
-  year: string;
+  selectedYear: AcademicYear;
   onUpdate: () => void;
 }
 
-export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerProps) => {
-  const [performers, setPerformers] = useState<TopPerformer[]>([]);
+export const TopPerformersManager = ({ selectedYear, onUpdate }: TopPerformersManagerProps) => {
+  const [oLevelPerformers, setOLevelPerformers] = useState<TopPerformer[]>([]);
+  const [aLevelPerformers, setALevelPerformers] = useState<TopPerformer[]>([]);
   const [editingPerformer, setEditingPerformer] = useState<TopPerformer | null>(null);
   const [isCreating, setIsCreating] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [deleteLoading, setDeleteLoading] = useState(false);
+  const { toast } = useToast();
+
   const [formData, setFormData] = useState({
     name: '',
     level: 'O-Level' as 'O-Level' | 'A-Level',
     aggregate: '',
+    distinctions: '',
     subjects: '',
-    achievement: '',
     category: 'overall' as 'overall' | 'science' | 'arts' | 'female',
     photoUrl: ''
   });
 
+  const API_BASE_URL = 'http://localhost:5001';
+
   useEffect(() => {
     loadPerformers();
-  }, [year]);
+  }, [selectedYear]);
 
   const loadPerformers = async () => {
     try {
-      const data = await unebPerformanceApi.getTopPerformers(year);
-      setPerformers(data);
+      const response = await axios.get<TopPerformersResponse>(
+        `${API_BASE_URL}/top-performers/year/${selectedYear.id}`
+      );
+      console.log('responsese')
+      setOLevelPerformers(response.data.oLevel || []);
+      setALevelPerformers(response.data.aLevel || []);
     } catch (error) {
       console.error('Failed to load top performers:', error);
+      toast({
+        title: "Error",
+        description: "Failed to load top performers",
+        variant: "destructive",
+      });
     }
   };
+
+  // console.log('oLevelPerformers', oLevelPerformers)
 
   const resetForm = () => {
     setFormData({
       name: '',
       level: 'O-Level',
       aggregate: '',
+      distinctions: '',
       subjects: '',
-      achievement: '',
       category: 'overall',
       photoUrl: ''
     });
@@ -59,29 +104,65 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
   };
 
   const handleSave = async () => {
-    if (!formData.name || !formData.aggregate || !formData.subjects || !formData.achievement) {
-      alert('Please fill in all required fields');
+    if (!formData.name || !formData.aggregate || !formData.subjects) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields (Name, Aggregate, Subjects)",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const aggregateNum = parseInt(formData.aggregate);
+    if (isNaN(aggregateNum)) {
+      toast({
+        title: "Validation Error",
+        description: "Aggregate must be a valid number",
+        variant: "destructive",
+      });
       return;
     }
 
     setLoading(true);
     try {
+      const payload = {
+        name: formData.name,
+        level: formData.level,
+        aggregate: aggregateNum,
+        distinctions: formData.distinctions ? parseInt(formData.distinctions) : undefined,
+        subjects: formData.subjects,
+        category: formData.category,
+        photoUrl: formData.photoUrl || undefined,
+        yearId: selectedYear.id
+      };
+
       if (editingPerformer) {
-        // await unebPerformanceApi.updateTopPerform(editingPerformer.id, {
-        //   ...formData,
-        //   year
-        // });
+        await axios.patch(`${API_BASE_URL}/top-performers/${editingPerformer.id}`, payload);
+        toast({
+          title: "Success",
+          description: "Top performer updated successfully",
+        });
       } else {
-        await unebPerformanceApi.createTopPerformer({
-          ...formData,
-          year
+        await axios.post(`${API_BASE_URL}/top-performers`, payload);
+        toast({
+          title: "Success",
+          description: "Top performer created successfully",
         });
       }
+      
       resetForm();
       loadPerformers();
       onUpdate();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to save top performer:', error);
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          "Failed to save top performer";
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
     } finally {
       setLoading(false);
     }
@@ -91,9 +172,9 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
     setFormData({
       name: performer.name,
       level: performer.level,
-      aggregate: performer.aggregate,
+      aggregate: performer.aggregate.toString(),
+      distinctions: performer.distinctions?.toString() || '',
       subjects: performer.subjects,
-      achievement: performer.achievement,
       category: performer.category,
       photoUrl: performer.photoUrl || ''
     });
@@ -102,14 +183,29 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this top performer?')) return;
+    if (!confirm('Are you sure you want to delete this top performer? This action cannot be undone.')) return;
 
+    setDeleteLoading(true);
     try {
-      await unebPerformanceApi.deleteTopPerformer(id);
+      await axios.delete(`${API_BASE_URL}/top-performers/${id}`);
+      toast({
+        title: "Success",
+        description: "Top performer deleted successfully",
+      });
       loadPerformers();
       onUpdate();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to delete top performer:', error);
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          "Failed to delete top performer";
+      toast({
+        title: "Error",
+        description: errorMessage,
+        variant: "destructive",
+      });
+    } finally {
+      setDeleteLoading(false);
     }
   };
 
@@ -119,6 +215,8 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
       [field]: value
     }));
   };
+
+  const allPerformers = [...oLevelPerformers, ...aLevelPerformers];
 
   return (
     <div className="space-y-6">
@@ -130,7 +228,7 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
               {editingPerformer ? 'Edit Top Performer' : 'Add New Top Performer'}
             </CardTitle>
             <CardDescription>
-              {editingPerformer ? 'Update performer details' : 'Add a new top performing student'}
+              {editingPerformer ? 'Update performer details' : `Add a new top performing student for ${selectedYear.year}`}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -141,11 +239,16 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
                   value={formData.name}
                   onChange={(e) => updateField('name', e.target.value)}
                   placeholder="Enter student name"
+                  disabled={loading}
                 />
               </div>
               <div>
                 <label className="text-sm font-medium">Level *</label>
-                <Select value={formData.level} onValueChange={(value: 'O-Level' | 'A-Level') => updateField('level', value)}>
+                <Select 
+                  value={formData.level} 
+                  onValueChange={(value: 'O-Level' | 'A-Level') => updateField('level', value)}
+                  disabled={loading}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
@@ -161,25 +264,42 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
               <div>
                 <label className="text-sm font-medium">Aggregate/Points *</label>
                 <Input
+                  type="number"
                   value={formData.aggregate}
                   onChange={(e) => updateField('aggregate', e.target.value)}
-                  placeholder="e.g., 8 or 15 points"
+                  placeholder="e.g., 8 or 15"
+                  disabled={loading}
                 />
               </div>
               <div>
-                <label className="text-sm font-medium">Category *</label>
-                <Select value={formData.category} onValueChange={(value: any) => updateField('category', value)}>
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="overall">Best Overall</SelectItem>
-                    <SelectItem value="science">Best Science</SelectItem>
-                    <SelectItem value="arts">Best Arts</SelectItem>
-                    <SelectItem value="female">Best Female</SelectItem>
-                  </SelectContent>
-                </Select>
+                <label className="text-sm font-medium">Distinctions (Optional)</label>
+                <Input
+                  type="number"
+                  value={formData.distinctions}
+                  onChange={(e) => updateField('distinctions', e.target.value)}
+                  placeholder="e.g., 8"
+                  disabled={loading}
+                />
               </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium">Category *</label>
+              <Select 
+                value={formData.category} 
+                onValueChange={(value: any) => updateField('category', value)}
+                disabled={loading}
+              >
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="overall">Best Overall</SelectItem>
+                  <SelectItem value="science">Best Science</SelectItem>
+                  <SelectItem value="arts">Best Arts</SelectItem>
+                  <SelectItem value="female">Best Female</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
 
             <div>
@@ -187,17 +307,9 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
               <Textarea
                 value={formData.subjects}
                 onChange={(e) => updateField('subjects', e.target.value)}
-                placeholder="e.g., Mathematics, Physics, Chemistry, Biology - D1"
+                placeholder="e.g., Mathematics, Physics, Chemistry, Biology"
                 rows={2}
-              />
-            </div>
-
-            <div>
-              <label className="text-sm font-medium">Achievement Title *</label>
-              <Input
-                value={formData.achievement}
-                onChange={(e) => updateField('achievement', e.target.value)}
-                placeholder="e.g., Best Student Overall"
+                disabled={loading}
               />
             </div>
 
@@ -207,15 +319,16 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
                 value={formData.photoUrl}
                 onChange={(e) => updateField('photoUrl', e.target.value)}
                 placeholder="https://example.com/photo.jpg"
+                disabled={loading}
               />
             </div>
 
             <div className="flex gap-3">
               <Button onClick={handleSave} disabled={loading}>
                 <Save className="h-4 w-4 mr-2" />
-                {editingPerformer ? 'Update' : 'Create'} Performer
+                {loading ? (editingPerformer ? 'Updating...' : 'Creating...') : (editingPerformer ? 'Update' : 'Create')} Performer
               </Button>
-              <Button variant="outline" onClick={resetForm}>
+              <Button variant="outline" onClick={resetForm} disabled={loading}>
                 Cancel
               </Button>
             </div>
@@ -227,7 +340,7 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
       <Card>
         <CardHeader className="flex flex-row items-center justify-between">
           <div>
-            <CardTitle>Top Performers - {year}</CardTitle>
+            <CardTitle>Top Performers - {selectedYear.year}</CardTitle>
             <CardDescription>
               Manage outstanding students and their achievements
             </CardDescription>
@@ -238,59 +351,141 @@ export const TopPerformersManager = ({ year, onUpdate }: TopPerformersManagerPro
           </Button>
         </CardHeader>
         <CardContent>
-          {performers.length === 0 ? (
-            <div className="text-center py-8 text-gray-500">
-              No top performers added for {year}
+          {allPerformers.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              <Trophy className="h-12 w-12 mx-auto mb-4 text-gray-300" />
+              <p className="font-medium">No top performers added for {selectedYear.year}</p>
+              <p className="text-sm mt-1">Click "Add Performer" to get started</p>
             </div>
           ) : (
-            <div className="space-y-4">
-              {performers.map((performer) => (
-                <div key={performer.id} className="flex items-center justify-between p-4 border rounded-lg">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="font-semibold text-lg">{performer.name}</h4>
-                      <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                        performer.category === 'overall' ? 'bg-yellow-100 text-yellow-800' :
-                        performer.category === 'science' ? 'bg-blue-100 text-blue-800' :
-                        performer.category === 'arts' ? 'bg-purple-100 text-purple-800' :
-                        'bg-pink-100 text-pink-800'
-                      }`}>
-                        {performer.category}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
-                      <div>
-                        <span className="font-medium">Level:</span> {performer.level}
+            <div className="space-y-6">
+              {/* O-Level Performers */}
+              {oLevelPerformers.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-blue-600" />
+                    O-Level Performers
+                  </h3>
+                  <div className="space-y-3">
+                    {oLevelPerformers.map((performer) => (
+                      <div key={performer.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="font-semibold text-lg">{performer.name}</h4>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              performer.category === 'overall' ? 'bg-yellow-100 text-yellow-800' :
+                              performer.category === 'science' ? 'bg-blue-100 text-blue-800' :
+                              performer.category === 'arts' ? 'bg-purple-100 text-purple-800' :
+                              'bg-pink-100 text-pink-800'
+                            }`}>
+                              {performer.category.charAt(0).toUpperCase() + performer.category.slice(1)}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                            <div>
+                              <span className="font-medium">Level:</span> {performer.level}
+                            </div>
+                            <div>
+                              <span className="font-medium">Aggregate:</span> {performer.aggregate}
+                            </div>
+                            {performer.distinctions && (
+                              <div>
+                                <span className="font-medium">Distinctions:</span> {performer.distinctions}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            <span className="font-medium">Subjects:</span> {performer.subjects}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(performer)}
+                            disabled={loading || deleteLoading}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(performer.id)}
+                            disabled={loading || deleteLoading}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
                       </div>
-                      <div>
-                        <span className="font-medium">Aggregate:</span> {performer.aggregate}
-                      </div>
-                      <div>
-                        <span className="font-medium">Achievement:</span> {performer.achievement}
-                      </div>
-                    </div>
-                    <div className="text-sm text-gray-600 mt-1">
-                      {performer.subjects}
-                    </div>
-                  </div>
-                  <div className="flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleEdit(performer)}
-                    >
-                      <Edit className="h-4 w-4" />
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => handleDelete(performer.id)}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    ))}
                   </div>
                 </div>
-              ))}
+              )}
+
+              {/* A-Level Performers */}
+              {aLevelPerformers.length > 0 && (
+                <div>
+                  <h3 className="text-lg font-semibold mb-3 flex items-center gap-2">
+                    <Trophy className="h-5 w-5 text-green-600" />
+                    A-Level Performers
+                  </h3>
+                  <div className="space-y-3">
+                    {aLevelPerformers.map((performer) => (
+                      <div key={performer.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                        <div className="flex-1">
+                          <div className="flex items-center gap-3 mb-2">
+                            <h4 className="font-semibold text-lg">{performer.name}</h4>
+                            <span className={`px-2 py-1 rounded-full text-xs font-medium ${
+                              performer.category === 'overall' ? 'bg-yellow-100 text-yellow-800' :
+                              performer.category === 'science' ? 'bg-blue-100 text-blue-800' :
+                              performer.category === 'arts' ? 'bg-purple-100 text-purple-800' :
+                              'bg-pink-100 text-pink-800'
+                            }`}>
+                              {performer.category.charAt(0).toUpperCase() + performer.category.slice(1)}
+                            </span>
+                          </div>
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-sm text-gray-600">
+                            <div>
+                              <span className="font-medium">Level:</span> {performer.level}
+                            </div>
+                            <div>
+                              <span className="font-medium">Points:</span> {performer.aggregate}
+                            </div>
+                            {performer.distinctions && (
+                              <div>
+                                <span className="font-medium">Distinctions:</span> {performer.distinctions}
+                              </div>
+                            )}
+                          </div>
+                          <div className="text-sm text-gray-600 mt-1">
+                            <span className="font-medium">Subjects:</span> {performer.subjects}
+                          </div>
+                        </div>
+                        <div className="flex gap-2">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleEdit(performer)}
+                            disabled={loading || deleteLoading}
+                          >
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleDelete(performer.id)}
+                            disabled={loading || deleteLoading}
+                            className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           )}
         </CardContent>

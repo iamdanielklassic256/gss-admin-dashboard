@@ -1,6 +1,3 @@
-// src/app/dashboard/uneb-performance/page.tsx
-'use client';
-
 import { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -236,12 +233,12 @@ const UnebPerformancePage = () => {
             />
           </TabsContent> */}
 
-          {/* <TabsContent value="performers">
+          <TabsContent value="performers">
             <TopPerformersManager
-              year={selectedYear}
+              selectedYear={selectedYear}
               onUpdate={loadData}
             />
-          </TabsContent> */}
+          </TabsContent>
 
           {/* <TabsContent value="subjects">
             <SubjectManager onUpdate={loadData} />

@@ -1,6 +1,3 @@
-// src/components/dashboard/uneb-performance/AcademicYearManager.tsx
-'use client';
-
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -105,7 +102,7 @@ export const AcademicYearManager = ({ academicYears, onUpdate }: AcademicYearMan
   const handleSetCurrent = async (year: string) => {
     setLoading(true);
     try {
-      await axios.put(`${API_BASE_URL}/academic-years/${year}/set-current`);
+      await axios.patch(`${API_BASE_URL}/academic-years/${year}/set-current`);
       toast({
         title: "Success",
         description: `Academic year ${year} is now the current year`,
@@ -146,7 +143,7 @@ export const AcademicYearManager = ({ academicYears, onUpdate }: AcademicYearMan
 
     setLoading(true);
     try {
-      await axios.patch(`${API_BASE_URL}/academic-years/${selectedYear.id}`, {
+      await axios.patch(`${API_BASE_URL}/academic-years/${selectedYear.year}`, {
         year: editYearValue
       });
       setEditDialogOpen(false);
