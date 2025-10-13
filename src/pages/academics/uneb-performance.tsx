@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react';
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import {  
-  TrendingUp, 
-  Users, 
-  BookOpen, 
-  Award, 
+import {
+  TrendingUp,
+  Users,
+  BookOpen,
+  Award,
 } from 'lucide-react';
 import { PerformanceManager } from '@/components/academics/uneb/PerformanceManager';
 import { TopPerformersManager } from '@/components/academics/uneb/TopPerformerManager';
@@ -58,27 +58,27 @@ const UnebPerformancePage = () => {
   const loadData = async () => {
     try {
       setLoading(true);
-      
+
       // Fetch academic years from your API
       const yearsResponse = await fetch('http://localhost:5001/academic-years');
       if (!yearsResponse.ok) throw new Error('Failed to fetch academic years');
       const yearsData: ApiAcademicYear[] = await yearsResponse.json();
-      
+
       // Fetch current academic year
       const currentResponse = await fetch('http://localhost:5001/academic-years/current');
       if (!currentResponse.ok) throw new Error('Failed to fetch current academic year');
       const currentYearData: ApiAcademicYear = await currentResponse.json();
-      
+
       setAcademicYears(yearsData);
-      
+
       // Set selected year to current year object
       setSelectedYear(currentYearData);
-      
+
       // For now, set empty overview since we don't have performance API
       setOverview({
         selectedYear: currentYearData
       });
-      
+
     } catch (error) {
       console.error('Failed to load data:', error);
       // Set empty states on error
@@ -240,9 +240,12 @@ const UnebPerformancePage = () => {
             />
           </TabsContent>
 
-          {/* <TabsContent value="subjects">
-            <SubjectManager onUpdate={loadData} />
-          </TabsContent> */}
+          <TabsContent value="subjects">
+            <SubjectManager
+              selectedYear={selectedYear}
+              onUpdate={loadData}
+            />
+          </TabsContent>
 
           <TabsContent value="years">
             <AcademicYearManager

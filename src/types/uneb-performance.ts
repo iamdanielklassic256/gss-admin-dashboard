@@ -1,5 +1,6 @@
 // src/types/uneb-performance.ts
 export interface AcademicYear {
+  id?: string
   year: string;
   isCurrent: boolean;
   createdAt: string;
