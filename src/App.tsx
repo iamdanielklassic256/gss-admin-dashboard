@@ -2,7 +2,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
-import { AboutPage, BlogPage, BoardGovernorPage, CoCurriculumPage, CurriculumPage, DashboardPage, DepartmentContactPage, LoginPage, MessagePage, NotFoundPage, SchoolLeadershipPage, SocialMediaPage, StudentLeadershipPage, SubscribersPage } from "./pages";
+import { AboutPage, BlogPage, BoardGovernorPage, CircularPage, CoCurriculumPage, CurriculumPage, DashboardPage, DepartmentContactPage, LoginPage, MessagePage, NotFoundPage, SchoolLeadershipPage, SocialMediaPage, StudentLeadershipPage, SubscribersPage, UnebPerformancePage } from "./pages";
 import { useAuthStore } from "./stores/authStore";
 import ProtectedRoute from "./components/authenication/ProtectedRoute";
 
@@ -77,6 +77,22 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <CoCurriculumPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/academics/circulars"
+        element={
+          <ProtectedRoute>
+            <CircularPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/academics/uneb-performance"
+        element={
+          <ProtectedRoute>
+            <UnebPerformancePage />
           </ProtectedRoute>
         }
       />

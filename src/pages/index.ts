@@ -6,6 +6,8 @@ export {default as SchoolLeadershipPage} from '@/pages/administration/school-lea
 export {default as StudentLeadershipPage} from '@/pages/administration/student-leadership'
 export {default as CurriculumPage} from '@/pages/academics/curriculum'
 export {default as CoCurriculumPage} from '@/pages/academics/co-curriculum'
+export {default as CircularPage} from '@/pages/academics/circulars'
+export {default as UnebPerformancePage} from '@/pages/academics/uneb-performance'
 export {default as AboutPage} from '@/pages/about/about'
 export {default as DepartmentContactPage} from '@/pages/contact/department'
 export {default as SocialMediaPage} from '@/pages/contact/social-media'

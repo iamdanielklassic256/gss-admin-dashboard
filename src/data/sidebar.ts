@@ -95,8 +95,8 @@ export const menuItems = [
     dropdown: [
       { title: "Curriculum", url: "/academics/curriculum" },
       { title: "Co-Curriculum", url: "/academics/co-curriculum" },
-      // { title: "Grades", url: "/academics/grades" },
-      // { title: "Timetable", url: "/academics/timetable" },
+      { title: "Circulars", url: "/academics/circulars" },
+      { title: "Uneb Performance", url: "/academics/uneb-performance" },
     ]
   },
   // {
