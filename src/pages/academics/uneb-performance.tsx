@@ -225,13 +225,12 @@ const UnebPerformancePage = () => {
             <PerformanceOverview overview={overview} selectedYear={selectedYear} />
           </TabsContent> */}
 
-          {/* <TabsContent value="performance">
+          <TabsContent value="performance">
             <PerformanceManager
-              year={selectedYear} 
-              performanceData={overview}
+              selectedYear={selectedYear}
               onUpdate={loadData}
             />
-          </TabsContent> */}
+          </TabsContent>
 
           <TabsContent value="performers">
             <TopPerformersManager
