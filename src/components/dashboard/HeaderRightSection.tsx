@@ -6,6 +6,9 @@ const HeaderRightSection = () => {
 	const [darkMode, setDarkMode] = useState(false)
 	const [showNotifications, setShowNotifications] = useState(false)
 	const [showProfile, setShowProfile] = useState(false)
+
+
+	console.log(showProfile)
 	
 	const notificationsRef = useRef<HTMLDivElement>(null)
 	const profileRef = useRef<HTMLDivElement>(null)

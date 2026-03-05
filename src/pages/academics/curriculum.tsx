@@ -1,6 +1,6 @@
 import { DashboardLayout } from '@/components/dashboard/DashboardLayout'
 import { useState, useEffect } from 'react'
-import { Plus, BookOpen, Filter, Search, Edit, Trash2 } from 'lucide-react'
+import { Plus, BookOpen, Search, Edit, Trash2 } from 'lucide-react'
 
 interface Curriculum {
   id?: string

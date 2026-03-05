@@ -1,5 +1,5 @@
 import { useState } from "react"
-import { LogIn, BookOpen } from "lucide-react"
+import { LogIn } from "lucide-react"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { AuthForm } from "./AuthForm"
 import { BrandSection } from "./BrandSection"

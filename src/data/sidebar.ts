@@ -1,14 +1,7 @@
-import { 
-  Home, 
-  BookOpen, 
-  Users, 
-  UserCheck, 
-  GraduationCap, 
-  Calendar, 
-  DollarSign, 
-  MessageSquare, 
-  FileText,
-  Mail,
+import {
+  Home,
+  BookOpen,
+  MessageSquare,
   MessageCircle,
   Phone,
   Share2,
@@ -141,26 +134,26 @@ export const menuItems = [
     description: "News, Messages & Social Media",
     color: "cyan",
     dropdown: [
-      { 
-        title: "Department Contacts", 
+      {
+        title: "Department Contacts",
         url: "/communications/department-contacts",
         icon: Phone,
         description: "Contact specific departments"
       },
-      { 
-        title: "Messages & Inquiries", 
+      {
+        title: "Messages & Inquiries",
         url: "/communications/messages",
         icon: MessageCircle,
         description: "Manage incoming messages"
       },
-      { 
-        title: "Social Media", 
+      {
+        title: "Social Media",
         url: "/communications/social-media",
         icon: Share2,
         description: "Social media management"
       },
-      { 
-        title: "News & Announcements", 
+      {
+        title: "News & Announcements",
         url: "/communications/news",
         icon: Newspaper,
         description: "School announcements"
@@ -171,8 +164,8 @@ export const menuItems = [
       //   icon: Mail,
       //   description: "Bulk email & newsletters"
       // },
-      { 
-        title: "Subscribers", 
+      {
+        title: "Subscribers",
         url: "/communications/subscribers",
         icon: SubscriptIcon,
         description: "Media & community relations"

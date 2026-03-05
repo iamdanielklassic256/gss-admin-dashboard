@@ -18,7 +18,7 @@ const BlogPage = () => {
 	const isLoading = useBlogsLoading();
 	const error = useBlogsError();
 
-	const { fetchBlogs, createBlog, updateBlog, deleteBlog, clearError } = useBlogStore();
+	const { fetchBlogs, createBlog, updateBlog, clearError } = useBlogStore();
 
 	const [editingBlog, setEditingBlog] = useState<any>(null);
 	const [isModalOpen, setIsModalOpen] = useState(false);
@@ -69,21 +69,21 @@ const BlogPage = () => {
 		}
 	};
 
-	const handleEdit = (blog: any) => {
-		setEditingBlog(blog);
-		setIsModalOpen(true);
-		clearError();
-	};
+	// const handleEdit = (blog: any) => {
+	// 	setEditingBlog(blog);
+	// 	setIsModalOpen(true);
+	// 	clearError();
+	// };
 
-	const handleDelete = async (id: string) => {
-		if (window.confirm('Are you sure you want to delete this blog?')) {
-			try {
-				await deleteBlog(id);
-			} catch (error) {
-				console.error('Failed to delete blog:', error);
-			}
-		}
-	};
+	// const handleDelete = async (id: string) => {
+	// 	if (window.confirm('Are you sure you want to delete this blog?')) {
+	// 		try {
+	// 			await deleteBlog(id);
+	// 		} catch (error) {
+	// 			console.error('Failed to delete blog:', error);
+	// 		}
+	// 	}
+	// };
 
 	const handleSort = (key: string, direction: 'asc' | 'desc') => {
 		setSortConfig({ key, direction });
